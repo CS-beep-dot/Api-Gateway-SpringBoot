@@ -13,8 +13,11 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Role {
+
+    public Role(String name) {
+        this.name = name;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -22,5 +25,6 @@ public class Role {
 
     @Column(nullable = false, unique = true)
     private String name;
+
 }
 
