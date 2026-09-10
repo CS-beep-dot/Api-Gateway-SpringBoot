@@ -5,6 +5,7 @@ import com.roma.apigatewayservice.domain.entity.User;
 import com.roma.apigatewayservice.domain.repository.RoleRepository;
 import com.roma.apigatewayservice.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,16 @@ public class AuthService {
         user.setRoles(Set.of(userRole));
 
         return userRepository.save(user);
+    }
+
+    public User login(String userName, String rawPassword) {
+        User user = userRepository.findByUsername(userName)
+                .orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
+
+        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+            throw new BadCredentialsException("Invalid username or password");
+        }
+        return user;
     }
 
 
